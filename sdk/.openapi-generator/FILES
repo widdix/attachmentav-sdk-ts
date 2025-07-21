@@ -1,0 +1,11 @@
+.openapi-generator-ignore
+apis/AttachmentAVApi.ts
+apis/index.ts
+index.ts
+models/AsyncDownloadScanRequest.ts
+models/AsyncS3ScanRequest.ts
+models/ScanResult.ts
+models/SyncDownloadScanRequest.ts
+models/SyncS3ScanRequest.ts
+models/index.ts
+runtime.ts
