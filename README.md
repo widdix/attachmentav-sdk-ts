@@ -71,7 +71,7 @@ npm i @widdix/attachmentav-sdk-ts
 An [active subscription and API key](https://attachmentav.com/help/virus-malware-scan-api/setup-guide/#api-key) are required. Replace `<API_KEY_PLACEHOLDER>` with the API key.
 
 ```javascript
-import { AttachmentAVApi, Configuration } from './sdk';
+import { AttachmentAVApi, Configuration } from '@widdix/attachmentav-sdk-ts';
 
 const config = new Configuration({
   apiKey: '<API_KEY_PLACEHOLDER>',
@@ -85,7 +85,7 @@ const api = new AttachmentAVApi(config);
 When following the setup guide, you specified the `ApiKeys` parameter for the CloudFormation stack. Replace `<API_KEY_PLACEHOLDER>` with one of those keys. 
 
 ```javascript
-import { AttachmentAVApi, Configuration } from './sdk';
+import { AttachmentAVApi, Configuration } from '@widdix/attachmentav-sdk-ts';
 
 const config = new Configuration({
   apiKey: '<API_KEY_PLACEHOLDER>',
