@@ -15,7 +15,7 @@ Second, get an API key by [subscribing to the attachmentAV API (SaaS)](https://a
 Third, send a scan request. Make sure to replace the `API_KEY_PLACEHOLDER` placeholder.
 
 ```js
-import { AttachmentAVApi, Configuration } from './sdk';
+import { AttachmentAVApi, Configuration } from '@attachmentav/virus-scan-sdk-js';
 import * as fs from 'fs';
 
 const config = new Configuration({
@@ -108,7 +108,7 @@ The maximum file size is 10 MB. The request timeout is 60 seconds.
 
 
 ```javascript
-const fileBuffer = fs.readFileSync('./README.ts');
+const fileBuffer = fs.readFileSync('./README.md');
 const blob = new Blob([fileBuffer]);
 
 const scanResult = await api.scanSyncBinaryPost({
