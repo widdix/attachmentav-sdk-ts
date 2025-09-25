@@ -53,8 +53,10 @@ After doing so, make sure to add the `sdk/package.json` afterwards.
 
 Use the following commands to publis a new version to the NPM registry.
 
-```
-cd sdk
+```bash
+cd sdk/
 cp ../README.md .
+npm version minor
+git push
 npm publish --access public
 ```

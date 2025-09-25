@@ -7,7 +7,7 @@ An SDK to integrate virus and malware scan capabilities into TypeScript applicat
 First, install the module.
 
 ```sh
-npm i @widdix/attachmentav-sdk-ts
+npm i @attachmentav/virus-scan-sdk-ts
 ```
 
 Second, get an API key by [subscribing to the attachmentAV API (SaaS)](https://attachmentav.com/subscribe/api/).
@@ -61,7 +61,7 @@ attachmentAV raises the bar for information security. Our solution is ISO 27001 
 ## Install SDK
 
 ```sh
-npm i @widdix/attachmentav-sdk-ts
+npm i @attachmentav/virus-scan-sdk-ts
 ```
 
 ## Configure SDK

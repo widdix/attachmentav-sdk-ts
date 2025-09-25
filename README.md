@@ -7,7 +7,7 @@ An SDK to integrate virus and malware scan capabilities into TypeScript applicat
 First, install the module.
 
 ```sh
-npm i @widdix/attachmentav-sdk-ts
+npm i @attachmentav/virus-scan-sdk-ts
 ```
 
 Second, get an API key by [subscribing to the attachmentAV API (SaaS)](https://attachmentav.com/subscribe/api/).
@@ -61,7 +61,7 @@ attachmentAV raises the bar for information security. Our solution is ISO 27001 
 ## Install SDK
 
 ```sh
-npm i @widdix/attachmentav-sdk-ts
+npm i @attachmentav/virus-scan-sdk-ts
 ```
 
 ## Configure SDK
@@ -71,7 +71,7 @@ npm i @widdix/attachmentav-sdk-ts
 An [active subscription and API key](https://attachmentav.com/help/virus-malware-scan-api/setup-guide/#api-key) are required. Replace `<API_KEY_PLACEHOLDER>` with the API key.
 
 ```javascript
-import { AttachmentAVApi, Configuration } from '@widdix/attachmentav-sdk-ts';
+import { AttachmentAVApi, Configuration } from '@attachmentav/virus-scan-sdk-ts';
 
 const config = new Configuration({
   apiKey: '<API_KEY_PLACEHOLDER>',
@@ -85,7 +85,7 @@ const api = new AttachmentAVApi(config);
 When following the setup guide, you specified the `ApiKeys` parameter for the CloudFormation stack. Replace `<API_KEY_PLACEHOLDER>` with one of those keys. 
 
 ```javascript
-import { AttachmentAVApi, Configuration } from '@widdix/attachmentav-sdk-ts';
+import { AttachmentAVApi, Configuration } from '@attachmentav/virus-scan-sdk-ts';
 
 const config = new Configuration({
   apiKey: '<API_KEY_PLACEHOLDER>',
