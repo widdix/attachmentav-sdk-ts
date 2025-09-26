@@ -1,8 +1,9 @@
-import { AttachmentAVApi, Configuration } from './sdk';
-import * as fs from 'fs';
+import { AttachmentAVApi, Configuration } from '@attachmentav/virus-scan-sdk-ts';
+//import { AttachmentAVApi, Configuration } from '../dist/index.mjs';
+import { readFileSync } from 'node:fs';
 
 const config = new Configuration({
-  apiKey: '<API_KEY_PLACEHOLDER'
+  apiKey: '<API_KEY_PLACEHOLDER>'
 });
 
 const api = new AttachmentAVApi(config);
@@ -18,7 +19,7 @@ async function scanSyncS3() {
 }
 
 async function scanSyncBinary() {
-  const fileBuffer = fs.readFileSync('./demo.txt');
+  const fileBuffer = readFileSync('./demo.txt');
   const blob = new Blob([fileBuffer]);
 
   const scanResult = await api.scanSyncBinaryPost({
@@ -58,8 +59,8 @@ async function scanAsyncDownload() {
 }
 
 
-scanSyncS3();
-scanSyncBinary();
-scanSyncDownload();
-scanAsyncS3();
-scanAsyncDownload();
+await scanSyncS3();
+await scanSyncBinary();
+await scanSyncDownload();
+await scanAsyncS3();
+await scanAsyncDownload();
