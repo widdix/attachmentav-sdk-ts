@@ -58,7 +58,6 @@ async function scanAsyncDownload() {
   console.log('Async download scan request submitted');
 }
 
-
 await scanSyncS3();
 await scanSyncBinary();
 await scanSyncDownload();
