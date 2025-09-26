@@ -1,7 +1,7 @@
 {
   "name": "@attachmentav/virus-scan-sdk-ts",
   "version": "0.3.0",
-  "description": "An SDK to integrate virus and malware scan capabilities into TypeScript applications. Scan files for viruses, trojans, and other kinds of malware with attachmentAV powered by Sophos.",
+  "description": "An SDK to integrate virus and malware scan capabilities into JavaScript / TypeScript applications. Scan files for viruses, trojans, and other kinds of malware with attachmentAV powered by Sophos.",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
   "types": "./dist/index.d.ts",
