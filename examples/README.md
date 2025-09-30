@@ -9,6 +9,10 @@ npm i @attachmentav/virus-scan-sdk-ts
 
 node sync-download.mjs
 node sync-binary.mjs
+node sync-s3.mjs
+
+node async-download.mjs
+node async-s3.mjs
 ```
 
 ### CommonJS
@@ -18,6 +22,10 @@ npm i @attachmentav/virus-scan-sdk-ts
 
 node sync-download.cjs
 node sync-binary.cjs
+node sync-s3.cjs
+
+node async-download.cjs
+node async-s3.cjs
 ```
 
 ## TypeScript
@@ -27,4 +35,8 @@ npm i @attachmentav/virus-scan-sdk-ts
 
 npx tsx sync-download.ts
 npx tsx sync-binary.ts
+npx tsx sync-s3.ts
+
+npx tsx async-download.ts
+npx tsx async-s3.ts
 ```
