@@ -2,7 +2,7 @@
 /* eslint-disable */
 /**
  * attachmentAV
- * An SDK to integrate virus and malware scan capabilities into JavaScript applications. Scan files for viruses, trojans, and other kinds of malware with attachmentAV powered by Sophos.
+ * An SDK to integrate virus and malware scan capabilities into JavaScript / TypeScript applications. Scan files for viruses, trojans, and other kinds of malware with attachmentAV powered by Sophos.
  *
  * The version of the OpenAPI document: 1.0.0
  * 
@@ -20,6 +20,7 @@ import type {
   ScanResult,
   SyncDownloadScanRequest,
   SyncS3ScanRequest,
+  Whoami,
 } from '../models/index';
 import {
     AsyncDownloadScanRequestFromJSON,
@@ -32,6 +33,8 @@ import {
     SyncDownloadScanRequestToJSON,
     SyncS3ScanRequestFromJSON,
     SyncS3ScanRequestToJSON,
+    WhoamiFromJSON,
+    WhoamiToJSON,
 } from '../models/index';
 
 export interface ScanAsyncDownloadPostRequest {
@@ -309,6 +312,47 @@ export class AttachmentAVApi extends runtime.BaseAPI {
      */
     async scanSyncS3Post(requestParameters: ScanSyncS3PostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ScanResult> {
         const response = await this.scanSyncS3PostRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Get information abour yourself.
+     */
+    async whoamiGetRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Whoami>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["x-api-key"] = await this.configuration.apiKey("x-api-key"); // apiKeyAuth authentication
+        }
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearerAuth", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/whoami`;
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => WhoamiFromJSON(jsonValue));
+    }
+
+    /**
+     * Get information abour yourself.
+     */
+    async whoamiGet(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Whoami> {
+        const response = await this.whoamiGetRaw(initOverrides);
         return await response.value();
     }
 
