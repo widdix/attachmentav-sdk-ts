@@ -6,6 +6,8 @@ models/AsyncS3ScanRequest.ts
 models/ScanResult.ts
 models/SyncDownloadScanRequest.ts
 models/SyncS3ScanRequest.ts
+models/UsageResult.ts
+models/UsageResultQuota.ts
 models/Whoami.ts
 models/index.ts
 runtime.ts
