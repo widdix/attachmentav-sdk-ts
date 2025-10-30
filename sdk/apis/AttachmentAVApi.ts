@@ -20,6 +20,7 @@ import type {
   ScanResult,
   SyncDownloadScanRequest,
   SyncS3ScanRequest,
+  Usage,
   Whoami,
 } from '../models/index';
 import {
@@ -33,6 +34,8 @@ import {
     SyncDownloadScanRequestToJSON,
     SyncS3ScanRequestFromJSON,
     SyncS3ScanRequestToJSON,
+    UsageFromJSON,
+    UsageToJSON,
     WhoamiFromJSON,
     WhoamiToJSON,
 } from '../models/index';
@@ -312,6 +315,47 @@ export class AttachmentAVApi extends runtime.BaseAPI {
      */
     async scanSyncS3Post(requestParameters: ScanSyncS3PostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ScanResult> {
         const response = await this.scanSyncS3PostRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Get remaining credits and quota.
+     */
+    async usageGetRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Usage>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["x-api-key"] = await this.configuration.apiKey("x-api-key"); // apiKeyAuth authentication
+        }
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearerAuth", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/usage`;
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => UsageFromJSON(jsonValue));
+    }
+
+    /**
+     * Get remaining credits and quota.
+     */
+    async usageGet(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Usage> {
+        const response = await this.usageGetRaw(initOverrides);
         return await response.value();
     }
 
