@@ -109,7 +109,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/UsageResult'
+                $ref: '#/components/schemas/Usage'
           description: Success
 components:
   schemas:
@@ -129,12 +129,12 @@ components:
         realfiletype:
           type: string
       type: object
-    UsageResult:
+    Usage:
       example:
-        size: size
-        realfiletype: realfiletype
-        finding: finding
-        status: status
+        credits: credits
+        quota:
+          limit: limit
+          period: period
       properties:
         credits:
           type: number

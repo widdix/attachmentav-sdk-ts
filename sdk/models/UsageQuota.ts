@@ -16,35 +16,35 @@ import { mapValues } from '../runtime';
 /**
  * 
  * @export
- * @interface UsageResultQuota
+ * @interface UsageQuota
  */
-export interface UsageResultQuota {
+export interface UsageQuota {
     /**
      * 
      * @type {number}
-     * @memberof UsageResultQuota
+     * @memberof UsageQuota
      */
     limit?: number;
     /**
      * 
      * @type {string}
-     * @memberof UsageResultQuota
+     * @memberof UsageQuota
      */
     period?: string;
 }
 
 /**
- * Check if a given object implements the UsageResultQuota interface.
+ * Check if a given object implements the UsageQuota interface.
  */
-export function instanceOfUsageResultQuota(value: object): value is UsageResultQuota {
+export function instanceOfUsageQuota(value: object): value is UsageQuota {
     return true;
 }
 
-export function UsageResultQuotaFromJSON(json: any): UsageResultQuota {
-    return UsageResultQuotaFromJSONTyped(json, false);
+export function UsageQuotaFromJSON(json: any): UsageQuota {
+    return UsageQuotaFromJSONTyped(json, false);
 }
 
-export function UsageResultQuotaFromJSONTyped(json: any, ignoreDiscriminator: boolean): UsageResultQuota {
+export function UsageQuotaFromJSONTyped(json: any, ignoreDiscriminator: boolean): UsageQuota {
     if (json == null) {
         return json;
     }
@@ -55,11 +55,11 @@ export function UsageResultQuotaFromJSONTyped(json: any, ignoreDiscriminator: bo
     };
 }
 
-export function UsageResultQuotaToJSON(json: any): UsageResultQuota {
-    return UsageResultQuotaToJSONTyped(json, false);
+export function UsageQuotaToJSON(json: any): UsageQuota {
+    return UsageQuotaToJSONTyped(json, false);
 }
 
-export function UsageResultQuotaToJSONTyped(value?: UsageResultQuota | null, ignoreDiscriminator: boolean = false): any {
+export function UsageQuotaToJSONTyped(value?: UsageQuota | null, ignoreDiscriminator: boolean = false): any {
     if (value == null) {
         return value;
     }

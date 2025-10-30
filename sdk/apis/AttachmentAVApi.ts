@@ -20,7 +20,7 @@ import type {
   ScanResult,
   SyncDownloadScanRequest,
   SyncS3ScanRequest,
-  UsageResult,
+  Usage,
   Whoami,
 } from '../models/index';
 import {
@@ -34,8 +34,8 @@ import {
     SyncDownloadScanRequestToJSON,
     SyncS3ScanRequestFromJSON,
     SyncS3ScanRequestToJSON,
-    UsageResultFromJSON,
-    UsageResultToJSON,
+    UsageFromJSON,
+    UsageToJSON,
     WhoamiFromJSON,
     WhoamiToJSON,
 } from '../models/index';
@@ -321,7 +321,7 @@ export class AttachmentAVApi extends runtime.BaseAPI {
     /**
      * Get remaining credits and quota.
      */
-    async usageGetRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<UsageResult>> {
+    async usageGetRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Usage>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -348,13 +348,13 @@ export class AttachmentAVApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => UsageResultFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => UsageFromJSON(jsonValue));
     }
 
     /**
      * Get remaining credits and quota.
      */
-    async usageGet(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<UsageResult> {
+    async usageGet(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Usage> {
         const response = await this.usageGetRaw(initOverrides);
         return await response.value();
     }
