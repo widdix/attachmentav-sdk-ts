@@ -199,6 +199,32 @@ await api.scanAsyncS3Post({
 console.log('Async S3 scan request submitted');
 ```
 
+### Who AM I
+
+Get information abour yourself.
+
+See [Whoami](sdk/models/Whoami.ts) for details.
+
+> Not supported by attachmentAV Virus Scan API (Self-hosted on AWS).
+
+```javascript
+const res = await api.whoamiGet();
+console.log('Who Am I', res);
+```
+
+### Usage
+
+Get remaining credits and quota.
+
+See [Usage](sdk/models/Usage.ts) for details.
+
+> Not supported by attachmentAV Virus Scan API (Self-hosted on AWS).
+
+```javascript
+const res = await api.whoamiGet();
+console.log('Who Am I', res);
+```
+
 ## Model
 
 For more details about the data model, please refer to the following pages.
@@ -209,6 +235,8 @@ For more details about the data model, please refer to the following pages.
 * [ScanResult](sdk/models/ScanResult.ts)
 * [SyncDownloadScanRequest](sdk/models/SyncDownloadScanRequest.ts)
 * [SyncS3ScanRequest](sdk/models/SyncS3ScanRequest.ts)
+* [Whoami](sdk/models/Whoami.ts)
+* [Usage](sdk/models/Usage.ts)
 
 ## Need help?
 
