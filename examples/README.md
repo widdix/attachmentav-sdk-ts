@@ -17,6 +17,7 @@ node async-s3.mjs
 node verify-callback.mjs # Replace <CALLBACK_URL_PLACEHOLDER> as described in the code.
 
 node whoami.mjs
+node usage.mjs
 ```
 
 ### CommonJS
@@ -34,6 +35,7 @@ node async-s3.cjs
 node verify-callback.cjs # Replace <CALLBACK_URL_PLACEHOLDER> as described in the code.
 
 node whoami.cjs
+node usage.cjs
 ```
 
 ## TypeScript
@@ -51,4 +53,5 @@ npx tsx async-s3.ts
 npx tsx verify-callback.ts # Replace <CALLBACK_URL_PLACEHOLDER> as described in the code.
 
 npx tsx whoami.ts
+npx tsx usage.ts
 ```
