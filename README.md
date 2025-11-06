@@ -88,7 +88,7 @@ When following the setup guide, you specified the `ApiKeys` parameter for the Cl
 import { AttachmentAVApi, Configuration } from '@attachmentav/virus-scan-sdk-ts';
 
 const config = new Configuration({
-  apiKey: '<API_KEY_PLACEHOLDER>',
+  accessToken: '<API_KEY_PLACEHOLDER>',
   basePath: 'https://example.com/api/v1'
 });
 
