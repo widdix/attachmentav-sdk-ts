@@ -12,7 +12,9 @@ node sync-binary.mjs
 node sync-s3.mjs
 
 node async-download.mjs
+node async-download-polling.mjs
 node async-s3.mjs
+node async-s3-polling.mjs
 
 node verify-callback.mjs # Replace <CALLBACK_URL_PLACEHOLDER> as described in the code.
 
@@ -30,7 +32,9 @@ node sync-binary.cjs
 node sync-s3.cjs
 
 node async-download.cjs
+node async-download-polling.cjs
 node async-s3.cjs
+node async-s3-polling.cjs
 
 node verify-callback.cjs # Replace <CALLBACK_URL_PLACEHOLDER> as described in the code.
 
@@ -48,7 +52,9 @@ npx tsx sync-binary.ts
 npx tsx sync-s3.ts
 
 npx tsx async-download.ts
+npx tsx async-download-polling.ts
 npx tsx async-s3.ts
+npx tsx async-s3-polling.ts
 
 npx tsx verify-callback.ts # Replace <CALLBACK_URL_PLACEHOLDER> as described in the code.
 

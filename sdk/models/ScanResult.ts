@@ -24,7 +24,7 @@ export interface ScanResult {
      * @type {string}
      * @memberof ScanResult
      */
-    status?: string;
+    status: string;
     /**
      * 
      * @type {string}
@@ -33,10 +33,10 @@ export interface ScanResult {
     finding?: string;
     /**
      * 
-     * @type {string}
+     * @type {number}
      * @memberof ScanResult
      */
-    size?: string;
+    size?: number;
     /**
      * 
      * @type {string}
@@ -49,6 +49,7 @@ export interface ScanResult {
  * Check if a given object implements the ScanResult interface.
  */
 export function instanceOfScanResult(value: object): value is ScanResult {
+    if (!('status' in value) || value['status'] === undefined) return false;
     return true;
 }
 
@@ -62,7 +63,7 @@ export function ScanResultFromJSONTyped(json: any, ignoreDiscriminator: boolean)
     }
     return {
         
-        'status': json['status'] == null ? undefined : json['status'],
+        'status': json['status'],
         'finding': json['finding'] == null ? undefined : json['finding'],
         'size': json['size'] == null ? undefined : json['size'],
         'realfiletype': json['realfiletype'] == null ? undefined : json['realfiletype'],

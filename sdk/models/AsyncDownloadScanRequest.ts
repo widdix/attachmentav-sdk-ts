@@ -36,7 +36,7 @@ export interface AsyncDownloadScanRequest {
      * @type {string}
      * @memberof AsyncDownloadScanRequest
      */
-    callbackUrl: string;
+    callbackUrl?: string;
     /**
      * 
      * @type {{ [key: string]: string; }}
@@ -62,7 +62,6 @@ export interface AsyncDownloadScanRequest {
  */
 export function instanceOfAsyncDownloadScanRequest(value: object): value is AsyncDownloadScanRequest {
     if (!('downloadUrl' in value) || value['downloadUrl'] === undefined) return false;
-    if (!('callbackUrl' in value) || value['callbackUrl'] === undefined) return false;
     return true;
 }
 
@@ -78,7 +77,7 @@ export function AsyncDownloadScanRequestFromJSONTyped(json: any, ignoreDiscrimin
         
         'downloadUrl': json['download_url'],
         'downloadHeaders': json['download_headers'] == null ? undefined : json['download_headers'],
-        'callbackUrl': json['callback_url'],
+        'callbackUrl': json['callback_url'] == null ? undefined : json['callback_url'],
         'callbackHeaders': json['callback_headers'] == null ? undefined : json['callback_headers'],
         'traceId': json['trace_id'] == null ? undefined : json['trace_id'],
         'customData': json['custom_data'] == null ? undefined : json['custom_data'],

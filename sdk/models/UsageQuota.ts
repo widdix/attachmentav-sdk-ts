@@ -24,19 +24,21 @@ export interface UsageQuota {
      * @type {number}
      * @memberof UsageQuota
      */
-    limit?: number;
+    limit: number;
     /**
      * 
      * @type {string}
      * @memberof UsageQuota
      */
-    period?: string;
+    period: string;
 }
 
 /**
  * Check if a given object implements the UsageQuota interface.
  */
 export function instanceOfUsageQuota(value: object): value is UsageQuota {
+    if (!('limit' in value) || value['limit'] === undefined) return false;
+    if (!('period' in value) || value['period'] === undefined) return false;
     return true;
 }
 
@@ -50,8 +52,8 @@ export function UsageQuotaFromJSONTyped(json: any, ignoreDiscriminator: boolean)
     }
     return {
         
-        'limit': json['limit'] == null ? undefined : json['limit'],
-        'period': json['period'] == null ? undefined : json['period'],
+        'limit': json['limit'],
+        'period': json['period'],
     };
 }
 

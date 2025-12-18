@@ -32,19 +32,21 @@ export interface Usage {
      * @type {number}
      * @memberof Usage
      */
-    credits?: number;
+    credits: number;
     /**
      * 
      * @type {UsageQuota}
      * @memberof Usage
      */
-    quota?: UsageQuota;
+    quota: UsageQuota;
 }
 
 /**
  * Check if a given object implements the Usage interface.
  */
 export function instanceOfUsage(value: object): value is Usage {
+    if (!('credits' in value) || value['credits'] === undefined) return false;
+    if (!('quota' in value) || value['quota'] === undefined) return false;
     return true;
 }
 
@@ -58,8 +60,8 @@ export function UsageFromJSONTyped(json: any, ignoreDiscriminator: boolean): Usa
     }
     return {
         
-        'credits': json['credits'] == null ? undefined : json['credits'],
-        'quota': json['quota'] == null ? undefined : UsageQuotaFromJSON(json['quota']),
+        'credits': json['credits'],
+        'quota': UsageQuotaFromJSON(json['quota']),
     };
 }
 

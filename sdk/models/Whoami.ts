@@ -24,13 +24,14 @@ export interface Whoami {
      * @type {string}
      * @memberof Whoami
      */
-    tenantId?: string;
+    tenantId: string;
 }
 
 /**
  * Check if a given object implements the Whoami interface.
  */
 export function instanceOfWhoami(value: object): value is Whoami {
+    if (!('tenantId' in value) || value['tenantId'] === undefined) return false;
     return true;
 }
 
@@ -44,7 +45,7 @@ export function WhoamiFromJSONTyped(json: any, ignoreDiscriminator: boolean): Wh
     }
     return {
         
-        'tenantId': json['tenantId'] == null ? undefined : json['tenantId'],
+        'tenantId': json['tenantId'],
     };
 }
 

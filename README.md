@@ -6,7 +6,7 @@ An SDK to integrate virus and malware scan capabilities into JavaScript / TypeSc
 
 First, install the module.
 
-```sh
+```bash
 npm i @attachmentav/virus-scan-sdk-ts
 ```
 
@@ -14,26 +14,25 @@ Second, get an API key by [subscribing to the attachmentAV API (SaaS)](https://a
 
 Third, send a scan request. Make sure to replace the `API_KEY_PLACEHOLDER` placeholder.
 
-```js
-import { AttachmentAVApi, Configuration } from '@attachmentav/virus-scan-sdk-js';
-import * as fs from 'fs';
+```javascript
+import { AttachmentAVApi, Configuration } from '@attachmentav/virus-scan-sdk-ts';
+import { readFileSync } from 'node:fs';
+import { Blob } from 'node:buffer';
 
 const config = new Configuration({
+  // When using the SaaS offering
   apiKey: '<API_KEY_PLACEHOLDER>'
+  // When using the self-hosted offering, replace attachmentav.yourcompany.com with the domain name of your attachmentAV API installation: https://attachmentav.com/help/virus-malware-scan-api-aws/developer/definition.html#domain-name
+  //accessToken: '<API_KEY_PLACEHOLDER>',
+  //basePath: 'https://attachmentav.yourcompany.com/api/v1'
 });
 
 const api = new AttachmentAVApi(config);
 
-async function scanFile() {
-  const fileBuffer = fs.readFileSync('./demo.txt');
-  const blob = new Blob([fileBuffer]);
-  const scanResult = await api.scanSyncBinaryPost({
-    body: blob
-  });
-  console.log('Sync binary scan result:', scanResult);
-}
-
-scanFile();
+const scanResult = await api.scanSyncBinaryPost({
+  body: new Blob([readFileSync('/path/to/file')])
+});
+console.log('Sync binary scan result:', scanResult);
 ```
 
 The request returns a scan result similar to the following example.
@@ -106,16 +105,14 @@ See [ScanResult](sdk/models/ScanResult.ts) for details.
 
 The maximum file size is 10 MB. The request timeout is 60 seconds.
 
-
 ```javascript
-const fileBuffer = fs.readFileSync('./README.md');
-const blob = new Blob([fileBuffer]);
-
 const scanResult = await api.scanSyncBinaryPost({
-  body: blob
+  body: new Blob([readFileSync('/path/to/file')])
 });
 console.log('Sync binary scan result:', scanResult);
 ```
+
+Find full example: [ts](https://github.com/widdix/attachmentav-sdk-ts/blob/main/examples/sync-binary.ts), [mjs](https://github.com/widdix/attachmentav-sdk-ts/blob/main/examples/sync-binary.mjs), [cjs](https://github.com/widdix/attachmentav-sdk-ts/blob/main/examples/sync-binary.cjs)
 
 ### Sync Scan: Download
 
@@ -126,15 +123,16 @@ See [SyncDownloadScanRequest](sdk/models/SyncDownloadScanRequest.ts) and [ScanRe
 
 The maximum file size is 10 MB. The request timeout is 60 seconds.
 
-
 ```javascript
 const scanResult = await api.scanSyncDownloadPost({
   syncDownloadScanRequest: {
-    downloadUrl: 'https://example.com/demo.txt'
+    downloadUrl: 'https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf'
   }
 });
 console.log('Sync download scan result:', scanResult);
 ```
+
+Find full example: [ts](https://github.com/widdix/attachmentav-sdk-ts/blob/main/examples/sync-download.ts), [mjs](https://github.com/widdix/attachmentav-sdk-ts/blob/main/examples/sync-download.mjs), [cjs](https://github.com/widdix/attachmentav-sdk-ts/blob/main/examples/sync-download.cjs)
 
 ### Sync Scan: S3
 
@@ -149,16 +147,18 @@ The maximum file size is 10 MB. The request timeout is 60 seconds.
 ```javascript
 const scanResult = await api.scanSyncS3Post({
   syncS3ScanRequest: {
-    bucket: 'example-bucket',
-    key: 'demo.txt',
+    bucket: '<BUCKET_NAME_PLACEHOLDER>',
+    key: '<OBJECT_KEY_PLACEHOLDER>'
   }
 });
 console.log('Sync S3 scan result:', scanResult);
 ```
 
-### Async Scan: Download
+Find full example: [ts](https://github.com/widdix/attachmentav-sdk-ts/blob/main/examples/sync-s3.ts), [mjs](https://github.com/widdix/attachmentav-sdk-ts/blob/main/examples/sync-s3.mjs), [cjs](https://github.com/widdix/attachmentav-sdk-ts/blob/main/examples/sync-s3.cjs)
 
-Send a URL to the attachmentAV Virus Scan API. attachmentAV will send the scan result to the callback URL. See [callback URL](https://attachmentav.com/help/virus-malware-scan-api/setup-guide/#callback-url) for details.
+### Async Scan: Download (callback)
+
+Send a URL to the attachmentAV Virus Scan API. attachmentAV will download the file and send the scan result to the [callback](https://attachmentav.com/help/virus-malware-scan-api/developer/definition.html#callback).
 
 See [AsyncDownloadScanRequest](sdk/models/AsyncDownloadScanRequest.ts) for details.
 
@@ -169,16 +169,49 @@ The maximum file size is 5 GB. The request timeout is 29 seconds; the asynchrono
 ```javascript
 await api.scanAsyncDownloadPost({
   asyncDownloadScanRequest: {
-    downloadUrl: 'https://example.com/demo.txt',
-    callbackUrl: 'https://example.com/callback'
+    downloadUrl: 'https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf',
+    callbackUrl: 'https://api.yourcompany.com/attachmentav/callback'
   }
 });
-console.log('Async download scan request submitted');
+console.log('Async download submitted');
 ```
 
-### Async Scan: S3
+Find full example: [ts](https://github.com/widdix/attachmentav-sdk-ts/blob/main/examples/async-download.ts), [mjs](https://github.com/widdix/attachmentav-sdk-ts/blob/main/examples/async-download.mjs), [cjs](https://github.com/widdix/attachmentav-sdk-ts/blob/main/examples/async-download.cjs)
 
-Send an S3 bucket name and object key to the attachmentAV Virus Scan API.  attachmentAV will send the scan result to the callback URL. See [callback URL](https://attachmentav.com/help/virus-malware-scan-api/setup-guide/#callback-url) for details.
+### Async Scan: Download (polling)
+
+Send a URL to the attachmentAV Virus Scan API. attachmentAV will download the file and store the scan result for 24 hours.
+
+See [AsyncDownloadScanRequest](sdk/models/AsyncDownloadScanRequest.ts) for details.
+
+The maximum file size is 5 GB. The request timeout is 29 seconds; the asynchronous scan job is not affected by this limit.
+
+> Not supported by attachmentAV Virus Scan API (Self-hosted on AWS) yet. Contact [hello@attachmentav.com](hello@attachmentav.com) to let us know, in case you need this feature. 
+
+```javascript
+const traceId = crypto.randomUUID();
+
+await api.scanAsyncDownloadPost({
+  asyncDownloadScanRequest: {
+    downloadUrl: 'https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf',
+    traceId
+  }
+});
+console.log('Async download submitted.');
+
+// wait some time...
+
+const scanResult = await api.scanAsyncResultGet({
+  traceId
+});
+console.log('Async download scan result:', scanResult);
+```
+
+Find full example: [ts](https://github.com/widdix/attachmentav-sdk-ts/blob/main/examples/async-download-polling.ts), [mjs](https://github.com/widdix/attachmentav-sdk-ts/blob/main/examples/async-download-polling.mjs), [cjs](https://github.com/widdix/attachmentav-sdk-ts/blob/main/examples/async-download-polling.cjs)
+
+### Async Scan: S3 (callback)
+
+Send an S3 bucket name and object key to the attachmentAV Virus Scan API. attachmentAV will download the file and send the scan result to the [callback](https://attachmentav.com/help/virus-malware-scan-api/developer/definition.html#callback).
 
 See [AsyncS3ScanRequest](sdk/models/AsyncS3ScanRequest.ts) for details.
 
@@ -191,13 +224,51 @@ The maximum file size is 5 GB. The request timeout is 29 seconds; the asynchrono
 ```javascript
 await api.scanAsyncS3Post({
   asyncS3ScanRequest: {
-    bucket: 'example-bucket',
-    key: 'demo.txt',
-    callbackUrl: 'https://example.com/callback'
+    bucket: '<BUCKET_NAME_PLACEHOLDER>',
+    key: '<OBJECT_KEY_PLACEHOLDER>',
+    callbackUrl: 'https://api.yourcompany.com/attachmentav/callback'
   }
 });
-console.log('Async S3 scan request submitted');
+console.log('Async S3 submitted');
 ```
+
+Find full example: [ts](https://github.com/widdix/attachmentav-sdk-ts/blob/main/examples/async-s3.ts), [mjs](https://github.com/widdix/attachmentav-sdk-ts/blob/main/examples/async-s3.mjs), [cjs](https://github.com/widdix/attachmentav-sdk-ts/blob/main/examples/async-s3.cjs)
+
+### Async Scan: S3 (polling)
+
+
+Send an S3 bucket name and object key to the attachmentAV Virus Scan API. attachmentAV will download the file and store the scan result for 24 hours.
+
+See [AsyncS3ScanRequest](sdk/models/AsyncS3ScanRequest.ts) for details.
+
+The maximum file size is 5 GB. The request timeout is 29 seconds; the asynchronous scan job is not affected by this limit.
+
+> A [bucket policy](https://attachmentav.com/help/virus-malware-scan-api/setup-guide/#s3-bucket-policy) is required to grant attachmentAV access to private S3 objects.
+
+> Not supported by attachmentAV Virus Scan API (Self-hosted on AWS) yet. Contact [hello@attachmentav.com](hello@attachmentav.com) to let us know, in case you need this feature.
+
+```javascript
+const traceId = crypto.randomUUID();
+
+await api.scanAsyncS3Post({
+  asyncS3ScanRequest: {
+    bucket: '<BUCKET_NAME_PLACEHOLDER>',
+    key: '<OBJECT_KEY_PLACEHOLDER>',
+    traceId
+  }
+});
+console.log('Async S3 submitted.');
+
+// wait some time...
+
+const scanResult = await api.scanAsyncResultGet({
+  traceId
+});
+console.log('Async download scan result:', scanResult);
+```
+
+Find full example: [ts](https://github.com/widdix/attachmentav-sdk-ts/blob/main/examples/async-s3-polling.ts), [mjs](https://github.com/widdix/attachmentav-sdk-ts/blob/main/examples/async-s3-polling.mjs), [cjs](https://github.com/widdix/attachmentav-sdk-ts/blob/main/examples/async-s3-polling.cjs)
+
 
 ### Who AM I
 
@@ -209,8 +280,10 @@ See [Whoami](sdk/models/Whoami.ts) for details.
 
 ```javascript
 const res = await api.whoamiGet();
-console.log('Who Am I', res);
+console.log('Who am I?', res);
 ```
+
+Find full example: [ts](https://github.com/widdix/attachmentav-sdk-ts/blob/main/examples/whoami.ts), [mjs](https://github.com/widdix/attachmentav-sdk-ts/blob/main/examples/whoami.mjs), [cjs](https://github.com/widdix/attachmentav-sdk-ts/blob/main/examples/whoami.cjs)
 
 ### Usage
 
@@ -221,9 +294,11 @@ See [Usage](sdk/models/Usage.ts) for details.
 > Not supported by attachmentAV Virus Scan API (Self-hosted on AWS).
 
 ```javascript
-const res = await api.whoamiGet();
-console.log('Who Am I', res);
+const res = await api.usageGet();
+console.log('Usage', res);
 ```
+
+Find full example: [ts](https://github.com/widdix/attachmentav-sdk-ts/blob/main/examples/usage.ts), [mjs](https://github.com/widdix/attachmentav-sdk-ts/blob/main/examples/usage.mjs), [cjs](https://github.com/widdix/attachmentav-sdk-ts/blob/main/examples/usage.cjs)
 
 ## Model
 
@@ -231,12 +306,12 @@ For more details about the data model, please refer to the following pages.
 
 * [AsyncDownloadScanRequest](sdk/models/AsyncDownloadScanRequest.ts)
 * [AsyncS3ScanRequest](sdk/models/AsyncS3ScanRequest.ts)
-* [AttachmentAVApi](sdk/models/AttachmentAVApi.ts)
 * [ScanResult](sdk/models/ScanResult.ts)
 * [SyncDownloadScanRequest](sdk/models/SyncDownloadScanRequest.ts)
 * [SyncS3ScanRequest](sdk/models/SyncS3ScanRequest.ts)
-* [Whoami](sdk/models/Whoami.ts)
 * [Usage](sdk/models/Usage.ts)
+* [Whoami](sdk/models/Whoami.ts)
+* [AttachmentAVApi](sdk/apis/AttachmentAVApi.ts)
 
 ## Need help?
 

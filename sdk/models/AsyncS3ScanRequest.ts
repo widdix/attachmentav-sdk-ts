@@ -42,7 +42,7 @@ export interface AsyncS3ScanRequest {
      * @type {string}
      * @memberof AsyncS3ScanRequest
      */
-    callbackUrl: string;
+    callbackUrl?: string;
     /**
      * 
      * @type {{ [key: string]: string; }}
@@ -69,7 +69,6 @@ export interface AsyncS3ScanRequest {
 export function instanceOfAsyncS3ScanRequest(value: object): value is AsyncS3ScanRequest {
     if (!('bucket' in value) || value['bucket'] === undefined) return false;
     if (!('key' in value) || value['key'] === undefined) return false;
-    if (!('callbackUrl' in value) || value['callbackUrl'] === undefined) return false;
     return true;
 }
 
@@ -86,7 +85,7 @@ export function AsyncS3ScanRequestFromJSONTyped(json: any, ignoreDiscriminator: 
         'bucket': json['bucket'],
         'key': json['key'],
         'version': json['version'] == null ? undefined : json['version'],
-        'callbackUrl': json['callback_url'],
+        'callbackUrl': json['callback_url'] == null ? undefined : json['callback_url'],
         'callbackHeaders': json['callback_headers'] == null ? undefined : json['callback_headers'],
         'traceId': json['trace_id'] == null ? undefined : json['trace_id'],
         'customData': json['custom_data'] == null ? undefined : json['custom_data'],

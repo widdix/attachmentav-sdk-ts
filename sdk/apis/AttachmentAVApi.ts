@@ -44,6 +44,10 @@ export interface ScanAsyncDownloadPostRequest {
     asyncDownloadScanRequest: AsyncDownloadScanRequest;
 }
 
+export interface ScanAsyncResultGetRequest {
+    traceId: string;
+}
+
 export interface ScanAsyncS3PostRequest {
     asyncS3ScanRequest: AsyncS3ScanRequest;
 }
@@ -113,6 +117,58 @@ export class AttachmentAVApi extends runtime.BaseAPI {
      */
     async scanAsyncDownloadPost(requestParameters: ScanAsyncDownloadPostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
         await this.scanAsyncDownloadPostRaw(requestParameters, initOverrides);
+    }
+
+    /**
+     * Retrieve the scan result for scan job.
+     */
+    async scanAsyncResultGetRaw(requestParameters: ScanAsyncResultGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ScanResult>> {
+        if (requestParameters['traceId'] == null) {
+            throw new runtime.RequiredError(
+                'traceId',
+                'Required parameter "traceId" was null or undefined when calling scanAsyncResultGet().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        if (requestParameters['traceId'] != null) {
+            queryParameters['trace_id'] = requestParameters['traceId'];
+        }
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["x-api-key"] = await this.configuration.apiKey("x-api-key"); // apiKeyAuth authentication
+        }
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearerAuth", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/scan/async/result`;
+
+        const response = await this.request({
+            path: urlPath,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => ScanResultFromJSON(jsonValue));
+    }
+
+    /**
+     * Retrieve the scan result for scan job.
+     */
+    async scanAsyncResultGet(requestParameters: ScanAsyncResultGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ScanResult> {
+        const response = await this.scanAsyncResultGetRaw(requestParameters, initOverrides);
+        return await response.value();
     }
 
     /**
