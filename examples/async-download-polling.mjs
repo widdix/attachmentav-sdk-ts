@@ -32,13 +32,13 @@ while(true) {
       traceId
     });
     console.log('Async download scan result:', scanResult);
-    exit(0)
+    exit(0);
   } catch (e) {
     if (e instanceof ResponseError) {
       if (e.response.status === 404) {
         i++;
         if (i < 10) {
-          await sleep(500);
+          await sleep(5000);
         } else {
           console.error('Async download scan result not found');
           exit(1);
