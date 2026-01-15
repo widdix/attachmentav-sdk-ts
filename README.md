@@ -12,7 +12,17 @@ npm i @attachmentav/virus-scan-sdk-ts
 
 Second, get an API key by [subscribing to the attachmentAV API (SaaS)](https://attachmentav.com/subscribe/api/).
 
-Third, send a scan request. Make sure to replace the `API_KEY_PLACEHOLDER` placeholder.
+Third, send a scan request. Make sure to replace the `<API_KEY_PLACEHOLDER>` placeholder and `<API_ENDPOINT_PLACEHOLDER>` with the API endpoint.
+
+API endpoints (SaaS)
+* `https://eu.developer.attachmentav.com/v1/` (Europe)
+* `https://us.developer.attachmentav.com/v1/` (United States of America)
+* `https://canada.developer.attachmentav.com/v1/` (Canada)
+* `https://india.developer.attachmentav.com/v1/` (India)
+
+API endpoint (Self-hosted on AWS)
+> When using the self-hosted offering, replace `attachmentav.yourcompany.com` with the domain name of your [attachmentAV API installation](https://attachmentav.com/help/virus-malware-scan-api-aws/developer/definition.html#domain-name).
+`https://attachmentav.yourcompany.com/api/v1`
 
 ```javascript
 import { AttachmentAVApi, Configuration } from '@attachmentav/virus-scan-sdk-ts';
@@ -20,11 +30,8 @@ import { readFileSync } from 'node:fs';
 import { Blob } from 'node:buffer';
 
 const config = new Configuration({
-  // When using the SaaS offering
-  apiKey: '<API_KEY_PLACEHOLDER>'
-  // When using the self-hosted offering, replace attachmentav.yourcompany.com with the domain name of your attachmentAV API installation: https://attachmentav.com/help/virus-malware-scan-api-aws/developer/definition.html#domain-name
-  //accessToken: '<API_KEY_PLACEHOLDER>',
-  //basePath: 'https://attachmentav.yourcompany.com/api/v1'
+  apiKey: '<API_KEY_PLACEHOLDER>',
+  basePath: '<API_ENDPOINT_PLACEHOLDER>'
 });
 
 const api = new AttachmentAVApi(config);
@@ -67,13 +74,20 @@ npm i @attachmentav/virus-scan-sdk-ts
 
 ### Configure SDK (SaaS)
 
-An [active subscription and API key](https://attachmentav.com/help/virus-malware-scan-api/setup-guide/#api-key) are required. Replace `<API_KEY_PLACEHOLDER>` with the API key.
+An [active subscription and API key](https://attachmentav.com/help/virus-malware-scan-api/setup-guide/#api-key) are required. Replace `<API_KEY_PLACEHOLDER>` with the API key and `<API_ENDPOINT_PLACEHOLDER>` with the API endpoint. The API endpoint (region) must match with the region selected for the subscription. The default is `Europe`.
+
+API endpoints (SaaS)
+* `https://eu.developer.attachmentav.com/v1/` (Europe)
+* `https://us.developer.attachmentav.com/v1/` (United States of America)
+* `https://canada.developer.attachmentav.com/v1/` (Canada)
+* `https://india.developer.attachmentav.com/v1/` (India)
 
 ```javascript
 import { AttachmentAVApi, Configuration } from '@attachmentav/virus-scan-sdk-ts';
 
 const config = new Configuration({
   apiKey: '<API_KEY_PLACEHOLDER>',
+  basePath: '<API_ENDPOINT_PLACEHOLDER>'
 });
 
 const api = new AttachmentAVApi(config);
@@ -81,14 +95,18 @@ const api = new AttachmentAVApi(config);
 
 ### Configure SDK (self-hosted on AWS)
 
-When following the setup guide, you specified the `ApiKeys` parameter for the CloudFormation stack. Replace `<API_KEY_PLACEHOLDER>` with one of those keys. 
+When following the setup guide, you specified the `ApiKeys` parameter for the CloudFormation stack. Replace `<API_KEY_PLACEHOLDER>` with one of those keys and `<API_ENDPOINT_PLACEHOLDER>` with the API endpoint.
+
+
+Example, replace `attachmentav.yourcompany.com` with the domain name of your [attachmentAV API installation](https://attachmentav.com/help/virus-malware-scan-api-aws/developer/definition.html#domain-name): 
+`https://attachmentav.yourcompany.com/api/v1`.
 
 ```javascript
 import { AttachmentAVApi, Configuration } from '@attachmentav/virus-scan-sdk-ts';
 
 const config = new Configuration({
   accessToken: '<API_KEY_PLACEHOLDER>',
-  basePath: 'https://example.com/api/v1'
+  basePath: '<API_ENDPOINT_PLACEHOLDER>'
 });
 
 const api = new AttachmentAVApi(config);
