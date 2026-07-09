@@ -257,7 +257,6 @@ Find full example: [ts](https://github.com/widdix/attachmentav-sdk-ts/blob/main/
 
 ### Async Scan: S3 (polling)
 
-
 Send an S3 bucket name and object key to the attachmentAV Virus Scan API. attachmentAV will download the file and store the scan result for 24 hours.
 
 See [AsyncS3ScanRequest](sdk/models/AsyncS3ScanRequest.ts) for details.
@@ -291,9 +290,26 @@ console.log('Async download scan result:', scanResult);
 Find full example: [ts](https://github.com/widdix/attachmentav-sdk-ts/blob/main/examples/async-s3-polling.ts), [mjs](https://github.com/widdix/attachmentav-sdk-ts/blob/main/examples/async-s3-polling.mjs), [cjs](https://github.com/widdix/attachmentav-sdk-ts/blob/main/examples/async-s3-polling.cjs)
 
 
-### Who AM I
+### List callback failures
 
-Get information abour yourself.
+List callback failures that prevent attachmentAV from invoking the defined callback_url. Sorted by time in descending order (youngest failure is returned first). Callback failures are stored for 30 days.
+
+See [CallbackFailures](sdk/models/CallbackFailures.ts) for details.
+
+> Not supported by attachmentAV Virus Scan API (Self-hosted on AWS).
+
+```javascript
+const res = await api.callbackFailuresGet({
+  callbackUrl: 'https://api.yourcompany.com/attachmentav/callback'
+});
+console.log('Callback failures', res);
+```
+
+Find full example: [ts](https://github.com/widdix/attachmentav-sdk-ts/blob/main/examples/callback-failures.ts), [mjs](https://github.com/widdix/attachmentav-sdk-ts/blob/main/examples/callback-failures.mjs), [cjs](https://github.com/widdix/attachmentav-sdk-ts/blob/main/examples/callback-failures.cjs)
+
+### Who Am I
+
+Get information about yourself.
 
 See [Whoami](sdk/models/Whoami.ts) for details.
 

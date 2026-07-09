@@ -61,7 +61,7 @@ export interface AsyncDownloadScanRequest {
  * Check if a given object implements the AsyncDownloadScanRequest interface.
  */
 export function instanceOfAsyncDownloadScanRequest(value: object): value is AsyncDownloadScanRequest {
-    if (!('downloadUrl' in value) || value['downloadUrl'] === undefined) return false;
+    if ((!('downloadUrl' in value) && !('download_url' in value)) || (value['downloadUrl'] === undefined && value['download_url'] === undefined)) return false;
     return true;
 }
 

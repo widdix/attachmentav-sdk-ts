@@ -2,6 +2,8 @@
 /* eslint-disable */
 export * from './AsyncDownloadScanRequest';
 export * from './AsyncS3ScanRequest';
+export * from './CallbackFailure';
+export * from './CallbackFailures';
 export * from './ScanResult';
 export * from './SyncDownloadScanRequest';
 export * from './SyncS3ScanRequest';

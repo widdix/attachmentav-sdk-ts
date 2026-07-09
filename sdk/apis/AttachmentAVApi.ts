@@ -12,33 +12,52 @@
  * Do not edit the class manually.
  */
 
-
 import * as runtime from '../runtime';
-import type {
-  AsyncDownloadScanRequest,
-  AsyncS3ScanRequest,
-  ScanResult,
-  SyncDownloadScanRequest,
-  SyncS3ScanRequest,
-  Usage,
-  Whoami,
-} from '../models/index';
 import {
+    type AsyncDownloadScanRequest,
     AsyncDownloadScanRequestFromJSON,
     AsyncDownloadScanRequestToJSON,
+} from '../models/AsyncDownloadScanRequest';
+import {
+    type AsyncS3ScanRequest,
     AsyncS3ScanRequestFromJSON,
     AsyncS3ScanRequestToJSON,
+} from '../models/AsyncS3ScanRequest';
+import {
+    type CallbackFailures,
+    CallbackFailuresFromJSON,
+    CallbackFailuresToJSON,
+} from '../models/CallbackFailures';
+import {
+    type ScanResult,
     ScanResultFromJSON,
     ScanResultToJSON,
+} from '../models/ScanResult';
+import {
+    type SyncDownloadScanRequest,
     SyncDownloadScanRequestFromJSON,
     SyncDownloadScanRequestToJSON,
+} from '../models/SyncDownloadScanRequest';
+import {
+    type SyncS3ScanRequest,
     SyncS3ScanRequestFromJSON,
     SyncS3ScanRequestToJSON,
+} from '../models/SyncS3ScanRequest';
+import {
+    type Usage,
     UsageFromJSON,
     UsageToJSON,
+} from '../models/Usage';
+import {
+    type Whoami,
     WhoamiFromJSON,
     WhoamiToJSON,
-} from '../models/index';
+} from '../models/Whoami';
+
+export interface CallbackFailuresGetRequest {
+    callbackUrl: string;
+    cursor?: string;
+}
 
 export interface ScanAsyncDownloadPostRequest {
     asyncDownloadScanRequest: AsyncDownloadScanRequest;
@@ -70,9 +89,73 @@ export interface ScanSyncS3PostRequest {
 export class AttachmentAVApi extends runtime.BaseAPI {
 
     /**
-     * Download a file from a remote location (HTTP/HTTPS), scan the file, and post the scan result to your callback URL.
+     * Creates request options for callbackFailuresGet without sending the request
      */
-    async scanAsyncDownloadPostRaw(requestParameters: ScanAsyncDownloadPostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+    async callbackFailuresGetRequestOpts(requestParameters: CallbackFailuresGetRequest): Promise<runtime.RequestOpts> {
+        if (requestParameters['callbackUrl'] == null) {
+            throw new runtime.RequiredError(
+                'callbackUrl',
+                'Required parameter "callbackUrl" was null or undefined when calling callbackFailuresGet().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        if (requestParameters['callbackUrl'] != null) {
+            queryParameters['callback_url'] = requestParameters['callbackUrl'];
+        }
+
+        if (requestParameters['cursor'] != null) {
+            queryParameters['cursor'] = requestParameters['cursor'];
+        }
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["x-api-key"] = await this.configuration.apiKey("x-api-key"); // apiKeyAuth authentication
+        }
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearerAuth", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/callback/failures`;
+
+        return {
+            path: urlPath,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        };
+    }
+
+    /**
+     * List callback failures
+     */
+    async callbackFailuresGetRaw(requestParameters: CallbackFailuresGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<CallbackFailures>> {
+        const requestOptions = await this.callbackFailuresGetRequestOpts(requestParameters);
+        const response = await this.request(requestOptions, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => CallbackFailuresFromJSON(jsonValue));
+    }
+
+    /**
+     * List callback failures
+     */
+    async callbackFailuresGet(requestParameters: CallbackFailuresGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CallbackFailures> {
+        const response = await this.callbackFailuresGetRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Creates request options for scanAsyncDownloadPost without sending the request
+     */
+    async scanAsyncDownloadPostRequestOpts(requestParameters: ScanAsyncDownloadPostRequest): Promise<runtime.RequestOpts> {
         if (requestParameters['asyncDownloadScanRequest'] == null) {
             throw new runtime.RequiredError(
                 'asyncDownloadScanRequest',
@@ -101,13 +184,21 @@ export class AttachmentAVApi extends runtime.BaseAPI {
 
         let urlPath = `/scan/async/download`;
 
-        const response = await this.request({
+        return {
             path: urlPath,
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
             body: AsyncDownloadScanRequestToJSON(requestParameters['asyncDownloadScanRequest']),
-        }, initOverrides);
+        };
+    }
+
+    /**
+     * Download a file from a remote location (HTTP/HTTPS), scan the file, and post the scan result to your callback URL.
+     */
+    async scanAsyncDownloadPostRaw(requestParameters: ScanAsyncDownloadPostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        const requestOptions = await this.scanAsyncDownloadPostRequestOpts(requestParameters);
+        const response = await this.request(requestOptions, initOverrides);
 
         return new runtime.VoidApiResponse(response);
     }
@@ -120,9 +211,9 @@ export class AttachmentAVApi extends runtime.BaseAPI {
     }
 
     /**
-     * Retrieve the scan result for scan job.
+     * Creates request options for scanAsyncResultGet without sending the request
      */
-    async scanAsyncResultGetRaw(requestParameters: ScanAsyncResultGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ScanResult>> {
+    async scanAsyncResultGetRequestOpts(requestParameters: ScanAsyncResultGetRequest): Promise<runtime.RequestOpts> {
         if (requestParameters['traceId'] == null) {
             throw new runtime.RequiredError(
                 'traceId',
@@ -153,12 +244,20 @@ export class AttachmentAVApi extends runtime.BaseAPI {
 
         let urlPath = `/scan/async/result`;
 
-        const response = await this.request({
+        return {
             path: urlPath,
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
-        }, initOverrides);
+        };
+    }
+
+    /**
+     * Retrieve the scan result for scan job.
+     */
+    async scanAsyncResultGetRaw(requestParameters: ScanAsyncResultGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ScanResult>> {
+        const requestOptions = await this.scanAsyncResultGetRequestOpts(requestParameters);
+        const response = await this.request(requestOptions, initOverrides);
 
         return new runtime.JSONApiResponse(response, (jsonValue) => ScanResultFromJSON(jsonValue));
     }
@@ -172,9 +271,9 @@ export class AttachmentAVApi extends runtime.BaseAPI {
     }
 
     /**
-     * Download a file from S3, scan the file, and post the scan result to your callback URL. A bucket policy is required to grant attachmentAV access to the S3 objects.
+     * Creates request options for scanAsyncS3Post without sending the request
      */
-    async scanAsyncS3PostRaw(requestParameters: ScanAsyncS3PostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+    async scanAsyncS3PostRequestOpts(requestParameters: ScanAsyncS3PostRequest): Promise<runtime.RequestOpts> {
         if (requestParameters['asyncS3ScanRequest'] == null) {
             throw new runtime.RequiredError(
                 'asyncS3ScanRequest',
@@ -203,13 +302,21 @@ export class AttachmentAVApi extends runtime.BaseAPI {
 
         let urlPath = `/scan/async/s3`;
 
-        const response = await this.request({
+        return {
             path: urlPath,
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
             body: AsyncS3ScanRequestToJSON(requestParameters['asyncS3ScanRequest']),
-        }, initOverrides);
+        };
+    }
+
+    /**
+     * Download a file from S3, scan the file, and post the scan result to your callback URL. A bucket policy is required to grant attachmentAV access to the S3 objects.
+     */
+    async scanAsyncS3PostRaw(requestParameters: ScanAsyncS3PostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        const requestOptions = await this.scanAsyncS3PostRequestOpts(requestParameters);
+        const response = await this.request(requestOptions, initOverrides);
 
         return new runtime.VoidApiResponse(response);
     }
@@ -222,9 +329,9 @@ export class AttachmentAVApi extends runtime.BaseAPI {
     }
 
     /**
-     * Upload a file, scan the file, and return the scan result.
+     * Creates request options for scanSyncBinaryPost without sending the request
      */
-    async scanSyncBinaryPostRaw(requestParameters: ScanSyncBinaryPostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ScanResult>> {
+    async scanSyncBinaryPostRequestOpts(requestParameters: ScanSyncBinaryPostRequest): Promise<runtime.RequestOpts> {
         if (requestParameters['body'] == null) {
             throw new runtime.RequiredError(
                 'body',
@@ -253,13 +360,21 @@ export class AttachmentAVApi extends runtime.BaseAPI {
 
         let urlPath = `/scan/sync/binary`;
 
-        const response = await this.request({
+        return {
             path: urlPath,
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
             body: requestParameters['body'] as any,
-        }, initOverrides);
+        };
+    }
+
+    /**
+     * Upload a file, scan the file, and return the scan result.
+     */
+    async scanSyncBinaryPostRaw(requestParameters: ScanSyncBinaryPostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ScanResult>> {
+        const requestOptions = await this.scanSyncBinaryPostRequestOpts(requestParameters);
+        const response = await this.request(requestOptions, initOverrides);
 
         return new runtime.JSONApiResponse(response, (jsonValue) => ScanResultFromJSON(jsonValue));
     }
@@ -273,9 +388,9 @@ export class AttachmentAVApi extends runtime.BaseAPI {
     }
 
     /**
-     * Download a file from a remote location (HTTP/HTTPS), scan the file, and return the scan result.
+     * Creates request options for scanSyncDownloadPost without sending the request
      */
-    async scanSyncDownloadPostRaw(requestParameters: ScanSyncDownloadPostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ScanResult>> {
+    async scanSyncDownloadPostRequestOpts(requestParameters: ScanSyncDownloadPostRequest): Promise<runtime.RequestOpts> {
         if (requestParameters['syncDownloadScanRequest'] == null) {
             throw new runtime.RequiredError(
                 'syncDownloadScanRequest',
@@ -304,13 +419,21 @@ export class AttachmentAVApi extends runtime.BaseAPI {
 
         let urlPath = `/scan/sync/download`;
 
-        const response = await this.request({
+        return {
             path: urlPath,
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
             body: SyncDownloadScanRequestToJSON(requestParameters['syncDownloadScanRequest']),
-        }, initOverrides);
+        };
+    }
+
+    /**
+     * Download a file from a remote location (HTTP/HTTPS), scan the file, and return the scan result.
+     */
+    async scanSyncDownloadPostRaw(requestParameters: ScanSyncDownloadPostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ScanResult>> {
+        const requestOptions = await this.scanSyncDownloadPostRequestOpts(requestParameters);
+        const response = await this.request(requestOptions, initOverrides);
 
         return new runtime.JSONApiResponse(response, (jsonValue) => ScanResultFromJSON(jsonValue));
     }
@@ -324,9 +447,9 @@ export class AttachmentAVApi extends runtime.BaseAPI {
     }
 
     /**
-     * Download a file from S3, scan the file, and return the scan result. A bucket policy is required to grant attachmentAV access to the S3 objects.
+     * Creates request options for scanSyncS3Post without sending the request
      */
-    async scanSyncS3PostRaw(requestParameters: ScanSyncS3PostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ScanResult>> {
+    async scanSyncS3PostRequestOpts(requestParameters: ScanSyncS3PostRequest): Promise<runtime.RequestOpts> {
         if (requestParameters['syncS3ScanRequest'] == null) {
             throw new runtime.RequiredError(
                 'syncS3ScanRequest',
@@ -355,13 +478,21 @@ export class AttachmentAVApi extends runtime.BaseAPI {
 
         let urlPath = `/scan/sync/s3`;
 
-        const response = await this.request({
+        return {
             path: urlPath,
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
             body: SyncS3ScanRequestToJSON(requestParameters['syncS3ScanRequest']),
-        }, initOverrides);
+        };
+    }
+
+    /**
+     * Download a file from S3, scan the file, and return the scan result. A bucket policy is required to grant attachmentAV access to the S3 objects.
+     */
+    async scanSyncS3PostRaw(requestParameters: ScanSyncS3PostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ScanResult>> {
+        const requestOptions = await this.scanSyncS3PostRequestOpts(requestParameters);
+        const response = await this.request(requestOptions, initOverrides);
 
         return new runtime.JSONApiResponse(response, (jsonValue) => ScanResultFromJSON(jsonValue));
     }
@@ -375,9 +506,9 @@ export class AttachmentAVApi extends runtime.BaseAPI {
     }
 
     /**
-     * Get remaining credits and quota.
+     * Creates request options for usageGet without sending the request
      */
-    async usageGetRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Usage>> {
+    async usageGetRequestOpts(): Promise<runtime.RequestOpts> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -397,12 +528,20 @@ export class AttachmentAVApi extends runtime.BaseAPI {
 
         let urlPath = `/usage`;
 
-        const response = await this.request({
+        return {
             path: urlPath,
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
-        }, initOverrides);
+        };
+    }
+
+    /**
+     * Get remaining credits and quota.
+     */
+    async usageGetRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Usage>> {
+        const requestOptions = await this.usageGetRequestOpts();
+        const response = await this.request(requestOptions, initOverrides);
 
         return new runtime.JSONApiResponse(response, (jsonValue) => UsageFromJSON(jsonValue));
     }
@@ -416,9 +555,9 @@ export class AttachmentAVApi extends runtime.BaseAPI {
     }
 
     /**
-     * Get information abour yourself.
+     * Creates request options for whoamiGet without sending the request
      */
-    async whoamiGetRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Whoami>> {
+    async whoamiGetRequestOpts(): Promise<runtime.RequestOpts> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -438,18 +577,26 @@ export class AttachmentAVApi extends runtime.BaseAPI {
 
         let urlPath = `/whoami`;
 
-        const response = await this.request({
+        return {
             path: urlPath,
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
-        }, initOverrides);
+        };
+    }
+
+    /**
+     * Get information about yourself.
+     */
+    async whoamiGetRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Whoami>> {
+        const requestOptions = await this.whoamiGetRequestOpts();
+        const response = await this.request(requestOptions, initOverrides);
 
         return new runtime.JSONApiResponse(response, (jsonValue) => WhoamiFromJSON(jsonValue));
     }
 
     /**
-     * Get information abour yourself.
+     * Get information about yourself.
      */
     async whoamiGet(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Whoami> {
         const response = await this.whoamiGetRaw(initOverrides);

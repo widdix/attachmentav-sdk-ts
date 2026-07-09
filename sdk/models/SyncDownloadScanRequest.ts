@@ -37,7 +37,7 @@ export interface SyncDownloadScanRequest {
  * Check if a given object implements the SyncDownloadScanRequest interface.
  */
 export function instanceOfSyncDownloadScanRequest(value: object): value is SyncDownloadScanRequest {
-    if (!('downloadUrl' in value) || value['downloadUrl'] === undefined) return false;
+    if ((!('downloadUrl' in value) && !('download_url' in value)) || (value['downloadUrl'] === undefined && value['download_url'] === undefined)) return false;
     return true;
 }
 

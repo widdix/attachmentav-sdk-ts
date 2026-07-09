@@ -18,6 +18,7 @@ node async-s3-polling.mjs
 
 node verify-callback.mjs # Replace <CALLBACK_URL_PLACEHOLDER> as described in the code.
 
+node callback-failures.mjs
 node whoami.mjs
 node usage.mjs
 ```
@@ -38,6 +39,7 @@ node async-s3-polling.cjs
 
 node verify-callback.cjs # Replace <CALLBACK_URL_PLACEHOLDER> as described in the code.
 
+node callback-failures.cjs
 node whoami.cjs
 node usage.cjs
 ```
@@ -58,6 +60,7 @@ npx tsx async-s3-polling.ts
 
 npx tsx verify-callback.ts # Replace <CALLBACK_URL_PLACEHOLDER> as described in the code.
 
+npx tsx callback-failures.ts
 npx tsx whoami.ts
 npx tsx usage.ts
 ```
