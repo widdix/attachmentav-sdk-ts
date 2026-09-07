@@ -5,7 +5,7 @@
     "@attachmentav/virus-scan-sdk-ts": "0.8.0"
   },
   "devDependencies": {
-    "@types/node": "26.1.1",
-    "tsx": "4.23.0"
+    "@types/node": "26.4.1",
+    "tsx": "4.23.13"
   }
 }
